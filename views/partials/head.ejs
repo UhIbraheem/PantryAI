@@ -1,0 +1,40 @@
+<%
+  const section = typeof active === 'undefined' ? '' : active;
+  const links = [
+    ['dashboard', '/dashboard', 'Dashboard'],
+    ['inventory', '/inventory', 'Inventory'],
+    ['recipes', '/recipes', 'Recipes'],
+    ['shopping', '/shopping', 'Shopping'],
+    ['analytics', '/analytics', 'Analytics']
+  ];
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= title %> · PantryAI</title>
+  <link rel="icon" href="/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<% if (user) { %>
+<div class="shell">
+  <aside class="sidebar">
+    <a class="brand" href="/dashboard"><img src="/logo.svg" alt="">PantryAI</a>
+    <nav class="nav">
+      <% for (const [key, href, label] of links) { %>
+        <a href="<%= href %>" class="<%= section === key ? 'active' : '' %>"><%= label %></a>
+      <% } %>
+    </nav>
+    <div class="sidebar-foot">
+      <%= user.name %>
+      <form method="post" action="/logout"><button class="btn btn-plain btn-sm">Log out</button></form>
+    </div>
+  </aside>
+  <main class="content">
+    <%- include('flash') %>
+<% } else { %>
+  <main class="auth">
+    <%- include('flash') %>
+<% } %>

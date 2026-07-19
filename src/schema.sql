@@ -1,0 +1,1 @@
+-- PantryAI schema. Tables are created on first run.
