@@ -1,0 +1,57 @@
+<%- include('partials/head', { title: 'Shopping', active: 'shopping' }) %>
+
+<div class="page-head">
+  <div>
+    <h1>Shopping list</h1>
+    <p><%= items.filter(i => !i.done).length %> item<%= items.filter(i => !i.done).length === 1 ? '' : 's' %> left to buy</p>
+  </div>
+  <% if (items.length > 0) { %>
+    <a class="btn btn-plain" href="/shopping/export">Export CSV</a>
+  <% } %>
+</div>
+
+<form class="filters" method="post" action="/shopping">
+  <input type="text" name="name" placeholder="Add something to buy" aria-label="Item name">
+  <button type="submit" class="btn btn-primary btn-sm">Add</button>
+</form>
+
+<% if (items.length === 0) { %>
+  <div class="empty">
+    Your list is empty. Add items above, or open a <a href="/recipes">recipe</a> and pull in its missing ingredients.
+  </div>
+<% } else { %>
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>Item</th>
+        <th>For</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for (const item of items) { %>
+        <tr>
+          <td style="width: 2.5rem">
+            <form method="post" action="/shopping/<%= item.id %>/toggle">
+              <button type="submit" class="check <%= item.done ? 'checked' : '' %>" aria-label="<%= item.done ? 'Mark as not bought' : 'Mark as bought' %>">
+                <%= item.done ? '✓' : '' %>
+              </button>
+            </form>
+          </td>
+          <td class="<%= item.done ? 'done' : '' %>"><%= item.name %></td>
+          <td class="<%= item.done ? 'done' : '' %>"><%= item.source || '—' %></td>
+          <td>
+            <div class="row-actions">
+              <form method="post" action="/shopping/<%= item.id %>/delete">
+                <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+<% } %>
+
+<%- include('partials/foot') %>
