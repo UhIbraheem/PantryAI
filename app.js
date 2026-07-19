@@ -29,6 +29,9 @@ app.get('/', (req, res) => {
   res.redirect(req.session.user ? '/dashboard' : '/login');
 });
 
+app.use(require('./src/routes/auth'));
+app.use(require('./src/routes/dashboard'));
+
 app.use((req, res) => {
   res.status(404).render('404');
 });
