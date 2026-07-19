@@ -359,6 +359,22 @@ td.num, th.num { text-align: right; }
 
 .empty a { font-weight: 600; }
 
+/* recipes */
+
+.ing-list, .saved-list {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.ing-list li, .saved-list li { margin-bottom: 0.25rem; }
+
+.ing-have::marker { color: var(--ok); }
+.ing-missing { color: var(--danger); }
+.ing-missing::marker { color: var(--danger); }
+
+.steps { margin: 0; padding-left: 1.25rem; }
+.steps li { margin-bottom: 0.5rem; max-width: 60ch; }
+
 /* filter bar */
 
 .filters {
