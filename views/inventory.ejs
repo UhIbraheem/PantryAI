@@ -1,0 +1,82 @@
+<%- include('partials/head', { title: 'Inventory', active: 'inventory' }) %>
+
+<div class="page-head">
+  <div>
+    <h1>Inventory</h1>
+    <p><%= items.length %> item<%= items.length === 1 ? '' : 's' %> in your pantry</p>
+  </div>
+  <div class="row-actions">
+    <a class="btn btn-plain" href="/inventory/export">Export CSV</a>
+    <a class="btn btn-primary" href="/inventory/new">Add item</a>
+  </div>
+</div>
+
+<form class="filters" method="get" action="/inventory">
+  <input type="search" name="q" placeholder="Search items" value="<%= filters.q %>" aria-label="Search items">
+  <select name="category" aria-label="Filter by category">
+    <option value="">All categories</option>
+    <% for (const c of categories) { %>
+      <option value="<%= c %>" <%= filters.category === c ? 'selected' : '' %>><%= c %></option>
+    <% } %>
+  </select>
+  <select name="expiring" aria-label="Filter by expiry">
+    <option value="">Any expiry</option>
+    <option value="soon" <%= filters.expiring === 'soon' ? 'selected' : '' %>>Expiring soon</option>
+    <option value="expired" <%= filters.expiring === 'expired' ? 'selected' : '' %>>Expired</option>
+  </select>
+  <button type="submit" class="btn btn-plain btn-sm">Filter</button>
+  <% if (filters.q || filters.category || filters.expiring) { %>
+    <a href="/inventory" class="btn btn-plain btn-sm">Clear</a>
+  <% } %>
+</form>
+
+<% if (items.length === 0) { %>
+  <div class="empty">
+    <% if (filters.q || filters.category || filters.expiring) { %>
+      No items match these filters. <a href="/inventory">Clear filters</a>
+    <% } else { %>
+      Your pantry is empty. <a href="/inventory/new">Add your first item</a> to get started.
+    <% } %>
+  </div>
+<% } else { %>
+  <table>
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th class="num">Qty</th>
+        <th>Category</th>
+        <th>Expires</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for (const item of items) { %>
+        <% const status = statusOf(item); %>
+        <tr>
+          <td><%= item.name %></td>
+          <td class="num"><%= item.quantity %><%= item.unit ? ' ' + item.unit : '' %></td>
+          <td><%= item.category %></td>
+          <td>
+            <% if (item.expires_on) { %>
+              <%= item.expires_on %>
+              <% if (status === 'expired') { %><span class="badge badge-expired">Expired</span><% } %>
+              <% if (status === 'soon') { %><span class="badge badge-soon">Soon</span><% } %>
+            <% } else { %>
+              <span class="badge badge-ok">No date</span>
+            <% } %>
+          </td>
+          <td>
+            <div class="row-actions">
+              <a class="btn btn-plain btn-sm" href="/inventory/<%= item.id %>/edit">Edit</a>
+              <form method="post" action="/inventory/<%= item.id %>/delete" data-confirm="Remove <%= item.name %> from your pantry?">
+                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+<% } %>
+
+<%- include('partials/foot') %>

@@ -31,6 +31,7 @@ app.get('/', (req, res) => {
 
 app.use(require('./src/routes/auth'));
 app.use(require('./src/routes/dashboard'));
+app.use(require('./src/routes/pantry'));
 
 app.use((req, res) => {
   res.status(404).render('404');
