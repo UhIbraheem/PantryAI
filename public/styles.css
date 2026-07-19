@@ -317,6 +317,7 @@ td.num, th.num { text-align: right; }
 .badge-soon { background: var(--brand-tint); color: var(--brand-deep); }
 .badge-expired { background: var(--danger-tint); color: var(--danger); }
 .badge-ok { background: var(--panel); color: var(--ink-soft); }
+.badge-ready { background: var(--ok-tint); color: var(--ok); }
 
 /* stat strip */
 
