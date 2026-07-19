@@ -58,6 +58,33 @@
   <% } %>
 </div>
 
+<div class="panel">
+  <h2>Recipe ideas</h2>
+  <% if (suggestions.length === 0) { %>
+    <div class="empty">
+      Add a few pantry items and recipe suggestions will show up here.
+    </div>
+  <% } else { %>
+    <table>
+      <thead>
+        <tr><th>Recipe</th><th>In pantry</th><th></th></tr>
+      </thead>
+      <tbody>
+        <% for (const r of suggestions) { %>
+          <tr>
+            <td><a href="/recipes/<%= r.id %>"><%= r.name %></a></td>
+            <td>
+              <%= r.matched.length %> of <%= r.ingredients.length %> ingredients
+              <% if (r.missing.length === 0) { %><span class="badge badge-soon">Ready to cook</span><% } %>
+            </td>
+            <td class="num"><a class="btn btn-plain btn-sm" href="/recipes/<%= r.id %>">View</a></td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  <% } %>
+</div>
+
 <% if (stats.total === 0) { %>
   <div class="empty">
     Your pantry is empty. <a href="/inventory/new">Add your first item</a> to see stats and suggestions here.

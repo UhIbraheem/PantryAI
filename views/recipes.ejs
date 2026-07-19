@@ -1,0 +1,78 @@
+<%- include('partials/head', { title: 'Recipes', active: 'recipes' }) %>
+
+<div class="page-head">
+  <div>
+    <h1>Recipes</h1>
+    <p>Ranked by how much of each recipe is already in your pantry.</p>
+  </div>
+</div>
+
+<form class="filters" method="get" action="/recipes">
+  <select name="cuisine" aria-label="Cuisine">
+    <option value="">Any cuisine</option>
+    <% for (const c of cuisines) { %>
+      <option value="<%= c %>" <%= filters.cuisine === c ? 'selected' : '' %>><%= c %></option>
+    <% } %>
+  </select>
+  <select name="difficulty" aria-label="Difficulty">
+    <option value="">Any difficulty</option>
+    <% for (const d of difficulties) { %>
+      <option value="<%= d %>" <%= filters.difficulty === d ? 'selected' : '' %>><%= d %></option>
+    <% } %>
+  </select>
+  <select name="dietary" aria-label="Dietary">
+    <option value="">Any diet</option>
+    <% for (const d of dietaryOptions) { %>
+      <option value="<%= d %>" <%= filters.dietary === d ? 'selected' : '' %>><%= d %></option>
+    <% } %>
+  </select>
+  <button type="submit" class="btn btn-plain btn-sm">Apply</button>
+  <% if (filters.cuisine || filters.difficulty || filters.dietary) { %>
+    <a href="/recipes" class="btn btn-plain btn-sm">Clear</a>
+  <% } %>
+</form>
+
+<% if (saved.length > 0) { %>
+  <div class="panel">
+    <h2>Saved recipes</h2>
+    <ul class="saved-list">
+      <% for (const r of saved) { %>
+        <li><a href="/recipes/<%= r.id %>"><%= r.name %></a> · <%= r.matched.length %> of <%= r.ingredients.length %> ingredients</li>
+      <% } %>
+    </ul>
+  </div>
+<% } %>
+
+<% if (results.length === 0) { %>
+  <div class="empty">No recipes match these filters. <a href="/recipes">Clear filters</a></div>
+<% } else { %>
+  <table>
+    <thead>
+      <tr>
+        <th>Recipe</th>
+        <th>Cuisine</th>
+        <th>Difficulty</th>
+        <th class="num">Time</th>
+        <th>In pantry</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for (const r of results) { %>
+        <tr>
+          <td><a href="/recipes/<%= r.id %>"><%= r.name %></a></td>
+          <td><%= r.cuisine %></td>
+          <td><%= r.difficulty %></td>
+          <td class="num"><%= r.minutes %> min</td>
+          <td>
+            <%= r.matched.length %> of <%= r.ingredients.length %>
+            <% if (r.missing.length === 0) { %><span class="badge badge-soon">Ready to cook</span><% } %>
+          </td>
+          <td class="num"><a class="btn btn-plain btn-sm" href="/recipes/<%= r.id %>">View</a></td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+<% } %>
+
+<%- include('partials/foot') %>
