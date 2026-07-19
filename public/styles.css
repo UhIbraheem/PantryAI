@@ -375,6 +375,33 @@ td.num, th.num { text-align: right; }
 .steps { margin: 0; padding-left: 1.25rem; }
 .steps li { margin-bottom: 0.5rem; max-width: 60ch; }
 
+/* shopping list */
+
+.check {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--bg);
+  font-size: 0.875rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 150ms ease-out, border-color 150ms ease-out;
+}
+
+.check:hover { border-color: var(--brand-deep); }
+
+.check.checked {
+  background: var(--brand-deep);
+  border-color: var(--brand-deep);
+}
+
+.done {
+  text-decoration: line-through;
+  color: var(--ink-soft);
+}
+
 /* filter bar */
 
 .filters {

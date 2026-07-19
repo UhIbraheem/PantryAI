@@ -10,11 +10,18 @@
       <% if (recipe.dietary.length > 0) { %> · <%= recipe.dietary.join(', ') %><% } %>
     </p>
   </div>
-  <form method="post" action="/recipes/<%= recipe.id %>/<%= isSaved ? 'unsave' : 'save' %>">
-    <button type="submit" class="btn <%= isSaved ? 'btn-plain' : 'btn-primary' %>">
-      <%= isSaved ? 'Unsave' : 'Save recipe' %>
-    </button>
-  </form>
+  <div class="row-actions">
+    <% if (recipe.missing.length > 0) { %>
+      <form method="post" action="/shopping/from/<%= recipe.id %>">
+        <button type="submit" class="btn btn-plain">Add missing to shopping list</button>
+      </form>
+    <% } %>
+    <form method="post" action="/recipes/<%= recipe.id %>/<%= isSaved ? 'unsave' : 'save' %>">
+      <button type="submit" class="btn <%= isSaved ? 'btn-plain' : 'btn-primary' %>">
+        <%= isSaved ? 'Unsave' : 'Save recipe' %>
+      </button>
+    </form>
+  </div>
 </div>
 
 <div class="panel">
