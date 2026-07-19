@@ -1,0 +1,78 @@
+<%- include('partials/head', { title: 'Analytics', active: 'analytics' }) %>
+
+<div class="page-head">
+  <div>
+    <h1>Analytics</h1>
+    <p>How your pantry is being used, straight from your data.</p>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat">
+    <div class="value"><%= summary.total %></div>
+    <div class="label">Items tracked</div>
+  </div>
+  <div class="stat">
+    <div class="value"><%= summary.soon %></div>
+    <div class="label">Expiring soon</div>
+  </div>
+  <div class="stat">
+    <div class="value"><%= summary.expired %></div>
+    <div class="label">Expired</div>
+  </div>
+  <div class="stat">
+    <div class="value"><%= summary.wasteRate %>%</div>
+    <div class="label">Of dated items expired</div>
+  </div>
+</div>
+
+<div class="panel">
+  <h2>Items by category</h2>
+  <% if (summary.byCategory.length === 0) { %>
+    <div class="empty">Add pantry items to see the breakdown.</div>
+  <% } else { %>
+    <div class="chart-rows">
+      <% for (const row of summary.byCategory) { %>
+        <div class="chart-row" title="<%= row.category %>: <%= row.count %>">
+          <span class="chart-label"><%= row.category %></span>
+          <span class="bar"><span class="bar-fill" style="width: <%= Math.round((row.count / summary.maxCategory) * 100) %>%"></span></span>
+          <span class="chart-value"><%= row.count %></span>
+        </div>
+      <% } %>
+    </div>
+  <% } %>
+</div>
+
+<div class="panel">
+  <h2>Freshness</h2>
+  <% if (summary.total === 0) { %>
+    <div class="empty">Nothing to measure yet.</div>
+  <% } else { %>
+    <div class="stack" role="img" aria-label="Freshness: <%= summary.fresh %> fresh, <%= summary.soon %> expiring soon, <%= summary.expired %> expired">
+      <% if (summary.fresh > 0) { %><span class="seg seg-fresh" style="flex-grow: <%= summary.fresh %>"></span><% } %>
+      <% if (summary.soon > 0) { %><span class="seg seg-soon" style="flex-grow: <%= summary.soon %>"></span><% } %>
+      <% if (summary.expired > 0) { %><span class="seg seg-expired" style="flex-grow: <%= summary.expired %>"></span><% } %>
+    </div>
+    <div class="legend">
+      <span><span class="dot dot-fresh"></span>Fresh · <%= summary.fresh %></span>
+      <span><span class="dot dot-soon"></span>Expiring soon · <%= summary.soon %></span>
+      <span><span class="dot dot-expired"></span>Expired · <%= summary.expired %></span>
+    </div>
+  <% } %>
+</div>
+
+<div class="panel">
+  <h2>Activity</h2>
+  <p>
+    <%= summary.savedCount %> saved recipe<%= summary.savedCount === 1 ? '' : 's' %> ·
+    <%= summary.shopping.bought %> of <%= summary.shopping.total %> shopping item<%= summary.shopping.total === 1 ? '' : 's' %> bought
+  </p>
+  <% if (summary.shopping.total > 0) { %>
+    <div class="stack stack-thin" role="img" aria-label="<%= summary.shopping.bought %> of <%= summary.shopping.total %> shopping items bought">
+      <% if (summary.shopping.bought > 0) { %><span class="seg seg-bought" style="flex-grow: <%= summary.shopping.bought %>"></span><% } %>
+      <% if (summary.shopping.total - summary.shopping.bought > 0) { %><span class="seg seg-rest" style="flex-grow: <%= summary.shopping.total - summary.shopping.bought %>"></span><% } %>
+    </div>
+  <% } %>
+</div>
+
+<%- include('partials/foot') %>

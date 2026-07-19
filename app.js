@@ -34,6 +34,7 @@ app.use(require('./src/routes/dashboard'));
 app.use(require('./src/routes/pantry'));
 app.use(require('./src/routes/recipes'));
 app.use(require('./src/routes/shopping'));
+app.use(require('./src/routes/analytics'));
 
 app.use((req, res) => {
   res.status(404).render('404');
