@@ -1,0 +1,50 @@
+<%- include('partials/head', { title: recipe.name, active: 'recipes' }) %>
+
+<p><a href="/recipes">&larr; All recipes</a></p>
+
+<div class="page-head">
+  <div>
+    <h1><%= recipe.name %></h1>
+    <p>
+      <%= recipe.cuisine %> · <%= recipe.difficulty %> · <%= recipe.minutes %> min
+      <% if (recipe.dietary.length > 0) { %> · <%= recipe.dietary.join(', ') %><% } %>
+    </p>
+  </div>
+  <div class="row-actions">
+    <% if (recipe.missing.length > 0) { %>
+      <form method="post" action="/shopping/from/<%= recipe.id %>">
+        <button type="submit" class="btn btn-plain">Add missing to shopping list</button>
+      </form>
+    <% } %>
+    <form method="post" action="/recipes/<%= recipe.id %>/<%= isSaved ? 'unsave' : 'save' %>">
+      <button type="submit" class="btn <%= isSaved ? 'btn-plain' : 'btn-primary' %>">
+        <%= isSaved ? 'Unsave' : 'Save recipe' %>
+      </button>
+    </form>
+  </div>
+</div>
+
+<div class="panel">
+  <h2>Ingredients</h2>
+  <p>You have <%= recipe.matched.length %> of <%= recipe.ingredients.length %> ingredients.</p>
+  <ul class="ing-list">
+    <% for (const ing of recipe.ingredients) { %>
+      <% if (recipe.matched.includes(ing)) { %>
+        <li class="ing-have"><%= ing %></li>
+      <% } else { %>
+        <li class="ing-missing"><%= ing %> — not in pantry</li>
+      <% } %>
+    <% } %>
+  </ul>
+</div>
+
+<div class="panel">
+  <h2>Steps</h2>
+  <ol class="steps">
+    <% for (const step of recipe.steps) { %>
+      <li><%= step %></li>
+    <% } %>
+  </ol>
+</div>
+
+<%- include('partials/foot') %>

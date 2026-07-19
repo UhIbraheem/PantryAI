@@ -1,0 +1,94 @@
+<%- include('partials/head', { title: 'Dashboard', active: 'dashboard' }) %>
+
+<div class="page-head">
+  <div>
+    <h1>Dashboard</h1>
+    <p>Hi <%= user.name %>, here's how your pantry is doing.</p>
+  </div>
+  <a class="btn btn-primary" href="/inventory/new">Add item</a>
+</div>
+
+<div class="stats">
+  <div class="stat">
+    <div class="value"><%= stats.total %></div>
+    <div class="label">Items in pantry</div>
+  </div>
+  <div class="stat">
+    <div class="value"><%= stats.categories %></div>
+    <div class="label">Categories</div>
+  </div>
+  <div class="stat">
+    <div class="value"><%= stats.soon %></div>
+    <div class="label">Expiring soon</div>
+  </div>
+  <div class="stat">
+    <div class="value"><%= stats.expired %></div>
+    <div class="label">Expired</div>
+  </div>
+</div>
+
+<div class="panel">
+  <h2>Needs attention</h2>
+  <% if (expiring.length === 0) { %>
+    <div class="empty">
+      Nothing is expiring in the next <%= 7 %> days. Nice.
+    </div>
+  <% } else { %>
+    <table>
+      <thead>
+        <tr><th>Item</th><th>Category</th><th>Expires</th><th></th></tr>
+      </thead>
+      <tbody>
+        <% for (const item of expiring) { %>
+          <tr>
+            <td><%= item.name %></td>
+            <td><%= item.category %></td>
+            <td><%= item.expires_on %></td>
+            <td>
+              <% if (statusOf(item) === 'expired') { %>
+                <span class="badge badge-expired">Expired</span>
+              <% } else { %>
+                <span class="badge badge-soon">Soon</span>
+              <% } %>
+            </td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  <% } %>
+</div>
+
+<div class="panel">
+  <h2>Recipe ideas</h2>
+  <% if (suggestions.length === 0) { %>
+    <div class="empty">
+      Add a few pantry items and recipe suggestions will show up here.
+    </div>
+  <% } else { %>
+    <table>
+      <thead>
+        <tr><th>Recipe</th><th>In pantry</th><th></th></tr>
+      </thead>
+      <tbody>
+        <% for (const r of suggestions) { %>
+          <tr>
+            <td><a href="/recipes/<%= r.id %>"><%= r.name %></a></td>
+            <td>
+              <%= r.matched.length %> of <%= r.ingredients.length %> ingredients
+              <% if (r.missing.length === 0) { %><span class="badge badge-soon">Ready to cook</span><% } %>
+            </td>
+            <td class="num"><a class="btn btn-plain btn-sm" href="/recipes/<%= r.id %>">View</a></td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  <% } %>
+</div>
+
+<% if (stats.total === 0) { %>
+  <div class="empty">
+    Your pantry is empty. <a href="/inventory/new">Add your first item</a> to see stats and suggestions here.
+  </div>
+<% } %>
+
+<%- include('partials/foot') %>
