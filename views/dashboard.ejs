@@ -75,7 +75,7 @@
             <td><a href="/recipes/<%= r.id %>"><%= r.name %></a></td>
             <td>
               <%= r.matched.length %> of <%= r.ingredients.length %> ingredients
-              <% if (r.missing.length === 0) { %><span class="badge badge-soon">Ready to cook</span><% } %>
+              <% if (r.missing.length === 0) { %><span class="badge badge-ready">Ready to cook</span><% } %>
             </td>
             <td class="num"><a class="btn btn-plain btn-sm" href="/recipes/<%= r.id %>">View</a></td>
           </tr>
