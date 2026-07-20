@@ -53,4 +53,5 @@ docs/            architecture and user journey notes
 The recipe recommendations are a rule-based pantry match: each recipe is scored
 by how many of its ingredients are already in your pantry, and missing ones can
 be pushed to the shopping list. See `docs/architecture.md` for how the code maps
-to the component design.
+to the system design, and `docs/component-design.md` for the reusable components
+each screen is assembled from.
